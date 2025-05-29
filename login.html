@@ -1,0 +1,293 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Vision Streetwear</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background-color: #ffffff;
+            --text-color: #1a1a1a;
+            --header-bg: #ffffff;
+            --accent-color: #ff4d4d;
+            --button-bg: #ff4d4d;
+            --button-text: #ffffff;
+            --button-hover-bg: #e63939;
+            --link-color: #ff4d4d;
+            --border-color: #e6e6e6;
+            --shadow-color: rgba(0, 0, 0, 0.15);
+        }
+
+        body.dark-mode {
+            --background-color: #121212;
+            --text-color: #e0e0e0;
+            --header-bg: #1e1e1e;
+            --accent-color: #ff7676;
+            --button-bg: #ff7676;
+            --button-hover-bg: #ff5555;
+            --link-color: #ff7676;
+            --border-color: #3a3a3a;
+            --shadow-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            transition: background-color 0.4s ease, color 0.4s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            background: var(--header-bg);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px var(--shadow-color);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .login-container h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2em;
+            font-weight: 900;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .login-container label {
+            display: block;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1em;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1em;
+            background: var(--background-color);
+            color: var(--text-color);
+            transition: border-color 0.3s ease;
+        }
+
+        .login-container input:focus {
+            border-color: var(--accent-color);
+            outline: none;
+        }
+
+        .login-button {
+            background: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1em;
+            font-weight: 700;
+            text-transform: uppercase;
+            width: 100%;
+            transition: background 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        .login-button:hover:not(:disabled) {
+            background: var(--button-hover-bg);
+            transform: scale(1.05);
+        }
+
+        .login-button:disabled {
+            background: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .message {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            font-weight: 600;
+        }
+
+        .error-message {
+            color: #d32f2f;
+            background: rgba(211, 47, 47, 0.1);
+        }
+
+        .loading-message {
+            color: #0288d1;
+            background: rgba(2, 136, 209, 0.1);
+        }
+
+        .back-home {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: var(--button-bg);
+            color: var(--button-text);
+            text-decoration: none;
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1em;
+            font-weight: 700;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .back-home:hover {
+            background: var(--button-hover-bg);
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 20px;
+                width: 95%;
+            }
+
+            .login-container h2 {
+                font-size: 1.7em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Admin Login</h2>
+        <form id="login-form">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required autocomplete="username">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required autocomplete="current-password">
+            <p class="message error-message" id="error-message">Access Denied</p>
+            <p class="message loading-message" id="loading-message">Connecting to admin dashboard...</p>
+            <p class="message error-message" id="final-error-message">Failed to connect to admin dashboard. Please try again later.</p>
+            <button type="submit" class="login-button" aria-label="Login">Login</button>
+        </form>
+        <a href="index.html" class="back-home" aria-label="Back to Home">Back to Home</a>
+    </div>
+    <script>
+        // Apply dark mode from localStorage if set
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+
+        const loginForm = document.getElementById('login-form');
+        const errorMessage = document.getElementById('error-message');
+        const loadingMessage = document.getElementById('loading-message');
+        const finalErrorMessage = document.getElementById('final-error-message');
+        const loginButton = loginForm.querySelector('.login-button');
+
+        function showMessage(element) {
+            // Hide all messages
+            [errorMessage, loadingMessage, finalErrorMessage].forEach(msg => {
+                msg.style.display = 'none';
+            });
+            // Show the specified message
+            if (element) {
+                element.style.display = 'block';
+            }
+        }
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            // Clear any existing messages
+            showMessage(null);
+            // Disable button to prevent multiple submissions
+            loginButton.disabled = true;
+            loginButton.textContent = 'Processing...';
+
+            if (username === 'admin' && password === 'vision') {
+                // Show loading message
+                showMessage(loadingMessage);
+                setTimeout(() => {
+                    // Show error message after 1.5 seconds
+                    showMessage(finalErrorMessage);
+                    loginButton.disabled = false;
+                    loginButton.textContent = 'Login';
+                }, 1500);
+            } else {
+                // Show access denied message
+                showMessage(errorMessage);
+                setTimeout(() => {
+                    showMessage(null);
+                    loginButton.disabled = false;
+                    loginButton.textContent = 'Login';
+                }, 3000);
+            }
+        });
+
+        // Reset form and messages on page load
+        loginForm.reset();
+        showMessage(null);
+        loginButton.disabled = false;
+        loginButton.textContent = 'Login';
+    </script>
+</body>
+</html>
