@@ -42,7 +42,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vision Streetwear - Credits</title>
+    <title>Vision Streetwear - 404 Not Found</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -87,6 +87,9 @@
             font-family: 'Inter', sans-serif;
             line-height: 1.7;
             transition: background-color 0.4s ease, color 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         header {
@@ -165,49 +168,46 @@
         }
 
         main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             padding: 50px 30px;
-            max-width: 1400px;
-            margin: 0 auto;
             text-align: center;
         }
 
-        .credits h1 {
+        .error h1 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 2.5em;
+            font-size: 6em;
             font-weight: 900;
-            margin-bottom: 40px;
-            text-transform: uppercase;
             color: var(--accent-color);
+            margin-bottom: 20px;
         }
 
-        .credits p {
+        .error h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .error p {
             font-size: 1.1em;
-            max-width: 850px;
-            margin: 0 auto 20px;
+            max-width: 600px;
+            margin-bottom: 30px;
             line-height: 1.8;
-        }
-
-        .credits ul {
-            list-style: none;
-            margin: 20px 0;
-            padding: 0;
-            font-size: 1.1em;
-        }
-
-        .credits li {
-            margin-bottom: 10px;
         }
 
         .back-home {
             display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
+            padding: 12px 30px;
             background: var(--button-bg);
             color: var(--button-text);
             text-decoration: none;
             border-radius: 6px;
             font-family: 'Montserrat', sans-serif;
-            font-size: 1em;
+            font-size: 1.1em;
             font-weight: 700;
             transition: background 0.3s ease, transform 0.3s ease;
             box-shadow: 0 4px 12px var(--shadow-color);
@@ -223,7 +223,6 @@
             padding: 25px;
             background-color: var(--header-bg);
             border-top: 1px solid var(--border-color);
-            margin-top: 50px;
         }
 
         footer p {
@@ -233,34 +232,20 @@
             color: var(--text-color);
         }
 
-        .social-media {
-            margin-bottom: 12px;
-        }
-
-        .social-media a, footer a {
-            margin: 0 10px;
-            color: var(--link-color);
-            text-decoration: none;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            transition: color 0.3s ease, transform 0.3s ease;
-        }
-
-        .social-media a:hover, footer a:hover {
-            color: var(--accent-color);
-            transform: translateY(-2px);
-        }
-
         @media (max-width: 768px) {
             header {
                 padding: 10px 20px;
             }
 
-            .credits h1 {
-                font-size: 1.8em;
+            .error h1 {
+                font-size: 4em;
             }
 
-            .credits p, .credits li {
+            .error h2 {
+                font-size: 1.5em;
+            }
+
+            .error p {
                 font-size: 1em;
             }
         }
@@ -280,25 +265,15 @@
         </div>
     </header>
     <main>
-        <section class="credits">
-            <h1>Credits</h1>
-            <p>Vision Streetwear was founded by four young teens from Thessaloniki, Greece, driven by a passion for streetwear and a dream to build a global brand. Our team brings together diverse talents to create a unique fashion experience.</p>
-            <ul>
-                <li><strong>Software/Web Developer</strong>: Built and maintains our website, ensuring a seamless online shopping experience.</li>
-                <li><strong>Clothing Designer</strong>: Crafts our bold, street-inspired designs that define Vision Streetwear.</li>
-                <li><strong>Social Media Manager</strong>: Grows our community and shares our story on platforms like TikTok and Instagram.</li>
-                <li><strong>Concept Creator</strong>: Develops the creative vision and innovative ideas behind our brand.</li>
-            </ul>
-            <p>Thank you for supporting Vision Streetwear. Together, we’re redefining hustle and style.</p>
+        <section class="error">
+            <h1>404</h1>
+            <h2>Page Not Found</h2>
+            <p>Oops! Looks like you’ve wandered off the street. The page you’re looking for doesn’t exist or has been moved.</p>
             <a href="index.html#home" class="back-home" aria-label="Back to Home">Back to Home</a>
         </section>
     </main>
     <footer>
-        <div class="social-media">
-            <a href="https://tiktok.com/@visionshop.est" aria-label="Visit our TikTok">TikTok</a>
-            <a href="https://instagram.com/visionshop.est" aria-label="Visit our Instagram">Instagram</a>
-        </div>
-        <p>Vision Streetwear - <a href="index.html#home" aria-label="Back to Home">Home</a></p>
+        <p>Vision Streetwear</p>
         <p>Powered by Shopify</p>
     </footer>
     <script>
